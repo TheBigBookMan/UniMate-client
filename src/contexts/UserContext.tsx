@@ -1,9 +1,23 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, FC, ReactNode } from "react";
 import { api } from "./../utils/api";
 
-export const UserContext = createContext();
+interface UserContextInterface {
+    user: User | null;
+    login: (userData: LoginDetails) => Promise<boolean>;
+    logout: () => void;
+    isLoggedIn: boolean;
+    signUpUser: (userData: LoginDetails) => void;
+}
 
-const UserProvider = ({ children }) => {
+interface UserProviderProps {
+    children: ReactNode;
+}
+
+export const UserContext = createContext<UserContextInterface | undefined>(
+    undefined
+);
+
+const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // !!! TEMP
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState<User | null>({
@@ -16,7 +30,7 @@ const UserProvider = ({ children }) => {
     // !!! TEMP FOR DEV
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const login = async (userData: LoginDetails) => {
+    const login = async (userData: LoginDetails): Promise<boolean> => {
         // TODO need to add JWT and cookies
 
         console.log(userData);
@@ -43,16 +57,24 @@ const UserProvider = ({ children }) => {
             alert(
                 "Network error logging in, please refresh page and try again."
             );
+            return false;
         }
     };
 
-    const logout = () => {
+    const logout = async (): Promise<void> => {
         // TODO this will call backend to clear cookies
         setUser(null);
         setIsLoggedIn(false);
+
+        try {
+            const response = await api.get("logout");
+        } catch (err) {
+            console.log(err);
+            alert("Network error.");
+        }
     };
 
-    const signUpUser = (userData) => {
+    const signUpUser = async (userData: LoginDetails): Promise<void> => {
         console.log("signup");
     };
 
@@ -82,13 +104,7 @@ const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider
-            value={value}
-            login={login}
-            isLoggedIn={isLoggedIn}
-        >
-            {children}
-        </UserContext.Provider>
+        <UserContext.Provider value={value}>{children}</UserContext.Provider>
     );
 };
 
