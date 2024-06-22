@@ -3,7 +3,7 @@ import Newsfeed from "./pages/Newsfeed";
 import Profile from "./pages/Profile";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { UserContext } from "./contexts/UserContext";
-import { useContext } from "react";
+import { FC, ReactNode, useContext } from "react";
 import NavBar from "./components/common/Navigation/NavBar";
 import Header from "./components/common/Header/Header";
 import SettingsProvider from "./contexts/SettingsContext";
@@ -19,15 +19,30 @@ import Home from "./pages/Home";
 import Notifications from "./pages/Notifications";
 import Calendar from "./pages/Calendar";
 
-const ProtectedRoute = ({ children }) => {
-    const { isLoggedIn } = useContext(UserContext);
+interface ProtectedRouteInterface {
+    children: ReactNode;
+}
+
+interface ProtectedLayoutInterface {
+    children: ReactNode;
+}
+
+const ProtectedRoute: FC<ProtectedRouteInterface> = ({ children }) => {
+    const context = useContext(UserContext);
+
+    if (!context) {
+        throw new Error("UserContext must be used within a UserProvider");
+    }
+
+    const { isLoggedIn } = context;
+
     if (!isLoggedIn) {
         return <Navigate to="/login" />;
     }
     return <ProtectedLayout>{children}</ProtectedLayout>;
 };
 
-const ProtectedLayout = ({ children }) => {
+const ProtectedLayout: FC<ProtectedLayoutInterface> = ({ children }) => {
     return (
         <SettingsProvider>
             <div className="flex flex-col justify-between w-full h-full">

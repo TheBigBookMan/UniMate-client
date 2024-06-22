@@ -20,12 +20,7 @@ export const UserContext = createContext<UserContextInterface | undefined>(
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // !!! TEMP
     // const [user, setUser] = useState(null);
-    const [user, setUser] = useState<User | null>({
-        University: "",
-        Username: "",
-        Email: "",
-        UserID: "",
-    });
+    const [user, setUser] = useState<User | null>(null);
 
     // !!! TEMP FOR DEV
     const [isLoggedIn, setIsLoggedIn] = useState(false);
