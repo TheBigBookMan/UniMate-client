@@ -9,6 +9,10 @@ declare global {
         signUpUser: (userData: LoginDetails) => void;
     }
 
+    interface SettingsContextInterface {
+        value: string;
+    }
+
     type LoginDetails = {
         username: string;
         uni: string;

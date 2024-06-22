@@ -1,10 +1,6 @@
 import { createContext, useState, useEffect, ReactNode, FC } from "react";
 import { api } from "./../utils/api";
 
-interface SettingsContextInterface {
-    value: string;
-}
-
 interface SettingsProviderProps {
     children: ReactNode;
 }
