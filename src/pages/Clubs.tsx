@@ -3,8 +3,8 @@ import ClubsList from "../components/features/Clubs/ClubsList";
 import SelectedClub from "../components/features/Clubs/SelectedClub";
 
 const Clubs = () => {
-    const [category, setCategory] = useState("All");
-    const [selectedClub, setSelectedClub] = useState(null);
+    const [category, setCategory] = useState<string>("All");
+    const [selectedClub, setSelectedClub] = useState<null | string>(null);
 
     return (
         <div className="flex flex-col h-full w-full gap-2">

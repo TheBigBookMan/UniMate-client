@@ -6,15 +6,17 @@ export const UserContext = createContext();
 const UserProvider = ({ children }) => {
     // !!! TEMP
     // const [user, setUser] = useState(null);
-    const [user, setUser] = useState({
+    const [user, setUser] = useState<User | null>({
         University: "",
         Username: "",
         Email: "",
+        UserID: "",
     });
 
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    // !!! TEMP FOR DEV
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const login = async (userData) => {
+    const login = async (userData: LoginDetails) => {
         // TODO need to add JWT and cookies
 
         console.log(userData);
@@ -23,7 +25,10 @@ const UserProvider = ({ children }) => {
 
             if (response.status === 200) {
                 const { Username, UserID, Email } = response.data;
+
+                // TODO return the Uni and USerId from the database call after login
                 setUser({
+                    University: "FLinders",
                     Username,
                     UserID,
                     Email,

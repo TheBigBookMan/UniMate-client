@@ -3,7 +3,7 @@ import { UserContext } from "../contexts/UserContext";
 
 const Login = () => {
     const { login } = useContext(UserContext);
-    const [loginDetails, setLoginDetails] = useState({
+    const [loginDetails, setLoginDetails] = useState<LoginDetails>({
         uni: "",
         username: "",
         password: "",
