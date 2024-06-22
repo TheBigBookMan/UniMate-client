@@ -2,7 +2,7 @@ import Login from "./pages/Login";
 import Newsfeed from "./pages/Newsfeed";
 import Profile from "./pages/Profile";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { UserContext } from "./contexts/UserContext";
+import useUserContext from "./hooks/useUserContext";
 import { FC, ReactNode, useContext } from "react";
 import NavBar from "./components/common/Navigation/NavBar";
 import Header from "./components/common/Header/Header";
@@ -28,13 +28,7 @@ interface ProtectedLayoutInterface {
 }
 
 const ProtectedRoute: FC<ProtectedRouteInterface> = ({ children }) => {
-    const context = useContext(UserContext);
-
-    if (!context) {
-        throw new Error("UserContext must be used within a UserProvider");
-    }
-
-    const { isLoggedIn } = context;
+    const { isLoggedIn } = useUserContext();
 
     if (!isLoggedIn) {
         return <Navigate to="/login" />;

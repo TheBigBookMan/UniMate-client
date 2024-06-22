@@ -1,14 +1,6 @@
 import { createContext, useState, useEffect, FC, ReactNode } from "react";
 import { api } from "./../utils/api";
 
-interface UserContextInterface {
-    user: User | null;
-    login: (userData: LoginDetails) => Promise<boolean>;
-    logout: () => void;
-    isLoggedIn: boolean;
-    signUpUser: (userData: LoginDetails) => void;
-}
-
 interface UserProviderProps {
     children: ReactNode;
 }
@@ -25,6 +17,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // !!! TEMP FOR DEV
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    // ? Send credentials to backend for checking login and add cookies if correct
     const login = async (userData: LoginDetails): Promise<boolean> => {
         // TODO need to add JWT and cookies
 
@@ -56,6 +49,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         }
     };
 
+    // ? Call to backend to remove cookies
     const logout = async (): Promise<void> => {
         // TODO this will call backend to clear cookies
         setUser(null);
@@ -69,6 +63,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         }
     };
 
+    // ? Add user credentials to the database
     const signUpUser = async (userData: LoginDetails): Promise<void> => {
         console.log("signup");
     };

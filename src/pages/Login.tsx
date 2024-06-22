@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { useState } from "react";
+import useUserContext from "../hooks/useUserContext";
 
 const Login = () => {
-    const { login } = useContext(UserContext);
+    const { login } = useUserContext();
     const [loginDetails, setLoginDetails] = useState<LoginDetails>({
         uni: "",
         username: "",
