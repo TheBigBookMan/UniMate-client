@@ -23,20 +23,52 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
         console.log(userData);
         try {
-            const response = await api.post("/auth/login", { ...userData });
+            const { username, password, uni } = userData;
+
+            const response = await api.post(
+                "/api/auth/login",
+                { username, password },
+                { headers: { UniversityName: uni } }
+            );
 
             if (response.status === 200) {
-                const { Username, UserID, Email } = response.data;
+                console.log(response);
+                if (response.status === 200) {
+                    const data = response.data;
+                    if (
+                        data["ResponseMessage"].toLowerCase() ===
+                        "reset password"
+                    ) {
+                        const { StudentId } = response.data;
+                        // TODO add in reset password functionality here API call
+                    } else if (
+                        data["ResponseMessage"].toLowerCase() ===
+                        "login success"
+                    ) {
+                        const { StudentId, UniEmail, UniStudentId } =
+                            response.data;
+                        // setUser({
+                        //     University: uni,
+                        //     Username: username,
+                        //     StudentId,
+                        //     Email: UniEmail,
+                        //    UniStudentId,
+                        // });
+                        // setIsLoggedIn(true);
+                        return true;
+                    }
+                }
+                // const { Username, UserID, Email } = response.data;
 
                 // TODO return the Uni and USerId from the database call after login
-                setUser({
-                    University: "FLinders",
-                    Username,
-                    UserID,
-                    Email,
-                });
-                setIsLoggedIn(true);
-                return true;
+                // setUser({
+                //     University: "FLinders",
+                //     Username,
+                //     UserID,
+                //     Email,
+                // });
+                // setIsLoggedIn(true);
+                // return true;
             } else {
                 return false;
             }
