@@ -3,7 +3,7 @@ import Newsfeed from "./pages/Newsfeed";
 import Profile from "./pages/Profile";
 import { Routes, Route, Navigate } from "react-router-dom";
 import useUserContext from "./hooks/useUserContext";
-import { FC, ReactNode, useContext } from "react";
+import { FC, ReactNode } from "react";
 import NavBar from "./components/common/Navigation/NavBar";
 import Header from "./components/common/Header/Header";
 import SettingsProvider from "./contexts/SettingsContext";
