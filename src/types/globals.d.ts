@@ -25,5 +25,6 @@ declare global {
         Email: string;
         University: string;
         UniStudentId: string;
+        CompleteOnboard: string;
     };
 }

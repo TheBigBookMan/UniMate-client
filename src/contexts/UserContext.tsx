@@ -49,13 +49,19 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
                     return studentId;
                     // TODO add in reset password functionality here API call
                 } else if (responseMessage === "login success") {
-                    const { studentId, uniEmail, uniStudentId } = data;
+                    const {
+                        studentId,
+                        uniEmail,
+                        uniStudentId,
+                        completeOnboard,
+                    } = data;
                     setUser({
                         University: uni,
                         Username: username,
                         StudentId: studentId,
                         Email: uniEmail,
                         UniStudentId: uniStudentId,
+                        CompleteOnboard: completeOnboard,
                     });
                     setIsLoggedIn(true);
                     nav("/");
