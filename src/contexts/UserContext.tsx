@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, FC, ReactNode } from "react";
 import { api } from "./../utils/api";
+import { useNavigate } from "react-router-dom";
+import { getCookie, getCookies } from "../utils/getCookies";
 
 interface UserProviderProps {
     children: ReactNode;
@@ -16,6 +18,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
     // !!! TEMP FOR DEV
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const nav = useNavigate();
 
     // ? Send credentials to backend for checking login and add cookies if correct
     const login = async (userData: LoginDetails): Promise<string | void> => {
@@ -48,7 +51,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
                         UniStudentId: uniStudentId,
                     });
                     setIsLoggedIn(true);
-                    // TODO nav to home
+                    nav("/");
                 }
             } else {
                 return "fail";
@@ -65,44 +68,76 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // ? Call to backend to remove cookies
     const logout = async (): Promise<void> => {
         // TODO this will call backend to clear cookies
-        setUser(null);
-        setIsLoggedIn(false);
 
         try {
             const response = await api.get("logout");
+
+            setUser(null);
+            setIsLoggedIn(false);
         } catch (err) {
             console.log(err);
             alert("Network error.");
         }
     };
 
-    // ? Add user credentials to the database
-    const signUpUser = async (userData: LoginDetails): Promise<void> => {
-        console.log("signup");
+    const value = { user, login, logout, isLoggedIn };
+
+    const verifyUserSession = async (): Promise<void> => {
+        const cookies = await getCookies();
+        let universityNameCookie;
+        let usernameCookie;
+
+        cookies.forEach((cookie) => {
+            if (cookie["name"] === "UniversityName") {
+                universityNameCookie = cookie["value"];
+            } else if (cookie["name"] === "StudentUsername") {
+                usernameCookie = cookie["value"];
+            }
+        });
+
+        if (!universityNameCookie || !usernameCookie) {
+            setIsLoggedIn(false);
+            nav("/login");
+        } else {
+            const formData = {
+                username: usernameCookie,
+                universityName: universityNameCookie,
+            };
+
+            try {
+                const response = await api.post("/api/auth/check-login", {
+                    ...formData,
+                });
+
+                if (response.status === 200) {
+                    console.log(response.data);
+                    const { studentId, uniEmail, uniStudentId } = response.data;
+
+                    setUser({
+                        University: universityNameCookie,
+                        Username: usernameCookie,
+                        StudentId: studentId,
+                        Email: uniEmail,
+                        UniStudentId: uniStudentId,
+                    });
+
+                    setIsLoggedIn(true);
+                    nav("/");
+                } else {
+                    console.log(response.data);
+                    setIsLoggedIn(false);
+                    nav("/login");
+                }
+            } catch (err) {
+                console.log(err);
+                alert("Network error.");
+                setIsLoggedIn(false);
+                nav("/login");
+            }
+        }
     };
 
-    const value = { user, login, logout, isLoggedIn, signUpUser };
-
     useEffect(() => {
-        const verifyUserSession = async () => {
-            setIsLoggedIn(true);
-            // !!! TEMP
-            // try {
-            //     const response = await api.get("/auth/verifyToken", {
-            //         withCredentials: true,
-            //     });
-            //     if (response.status === 200) {
-            //         console.log("Session is active:", response.data.user);
-            //         setUser(response.data.user);
-            //         setIsLoggedIn(true);
-            //     }
-            // } catch (error) {
-            //     console.log("Session is not active:", error);
-            //     setIsLoggedIn(false);
-            //     setUser(null);
-            // }
-        };
-
         verifyUserSession();
     }, []);
 

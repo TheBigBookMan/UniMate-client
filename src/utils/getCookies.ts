@@ -1,14 +1,13 @@
-export function getCookie(name: string): string | null {
-    const nameEQ = name + "=";
+export function getCookies(): Array<{ name: string; value: string }> {
+    const cookiesArray: Array<{ name: string; value: string }> = [];
     const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i];
 
-        if (cookie.indexOf(nameEQ) === 0) {
-            return decodeURIComponent(
-                cookie.substring(nameEQ.length, cookie.length)
-            );
-        }
-    }
-    return null;
+    cookies.forEach((cookie) => {
+        let [name, value] = cookie.split("=");
+        name = name.trim();
+        value = decodeURIComponent(value.trim());
+        cookiesArray.push({ name, value });
+    });
+
+    return cookiesArray;
 }
