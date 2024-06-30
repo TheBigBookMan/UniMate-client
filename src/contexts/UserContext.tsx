@@ -18,10 +18,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // ? Send credentials to backend for checking login and add cookies if correct
-    const login = async (userData: LoginDetails): Promise<boolean> => {
-        // TODO need to add JWT and cookies
-
-        console.log(userData);
+    const login = async (userData: LoginDetails): Promise<string | void> => {
         try {
             const { username, password, uni } = userData;
 
@@ -33,51 +30,35 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
             if (response.status === 200) {
                 console.log(response);
-                if (response.status === 200) {
-                    const data = response.data;
-                    if (
-                        data["ResponseMessage"].toLowerCase() ===
-                        "reset password"
-                    ) {
-                        const { StudentId } = response.data;
-                        // TODO add in reset password functionality here API call
-                    } else if (
-                        data["ResponseMessage"].toLowerCase() ===
-                        "login success"
-                    ) {
-                        const { StudentId, UniEmail, UniStudentId } =
-                            response.data;
-                        // setUser({
-                        //     University: uni,
-                        //     Username: username,
-                        //     StudentId,
-                        //     Email: UniEmail,
-                        //    UniStudentId,
-                        // });
-                        // setIsLoggedIn(true);
-                        return true;
-                    }
-                }
-                // const { Username, UserID, Email } = response.data;
+                const data = response.data;
+                const responseMessage = data["responseMessage"].toLowerCase();
 
-                // TODO return the Uni and USerId from the database call after login
-                // setUser({
-                //     University: "FLinders",
-                //     Username,
-                //     UserID,
-                //     Email,
-                // });
-                // setIsLoggedIn(true);
-                // return true;
+                if (responseMessage === "reset password") {
+                    const { studentId } = data;
+
+                    return studentId;
+                    // TODO add in reset password functionality here API call
+                } else if (responseMessage === "login success") {
+                    const { studentId, uniEmail, uniStudentId } = data;
+                    setUser({
+                        University: uni,
+                        Username: username,
+                        StudentId: studentId,
+                        Email: uniEmail,
+                        UniStudentId: uniStudentId,
+                    });
+                    setIsLoggedIn(true);
+                    // TODO nav to home
+                }
             } else {
-                return false;
+                return "fail";
             }
         } catch (err) {
             console.log(err);
             alert(
                 "Network error logging in, please refresh page and try again."
             );
-            return false;
+            return "fail";
         }
     };
 

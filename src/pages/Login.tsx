@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useUserContext from "../hooks/useUserContext";
+import { RotatingLines } from "react-loader-spinner";
 
 const Login = () => {
     const { login } = useUserContext();
@@ -8,6 +9,7 @@ const Login = () => {
         username: "",
         password: "",
     });
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const checkLogin = async () => {
         if (loginDetails.uni === "") {
@@ -20,9 +22,22 @@ const Login = () => {
             return;
         }
 
-        const loginResponse = await login({ ...loginDetails });
+        setIsLoading(true);
 
+        const loginResponse = await login({ ...loginDetails });
         console.log(loginResponse);
+
+        if (typeof loginResponse === "string") {
+            if (loginResponse === "incorrect") {
+                alert("Incorrect credentials, please try again.");
+            } else if (loginResponse == "fail") {
+                console.log("fail");
+            } else {
+                // TODO this is a studentId and then this can be used to reset password easier
+                console.log(loginResponse);
+            }
+        }
+        setIsLoading(false);
     };
 
     return (
@@ -81,7 +96,20 @@ const Login = () => {
                         onClick={() => checkLogin()}
                         className="w-[160px] h-[30px] bg-emerald-500 rounded-lg"
                     >
-                        Login
+                        {isLoading ? (
+                            <div className="flex items-center justify-center">
+                                <RotatingLines
+                                    visible={isLoading}
+                                    width="20"
+                                    strokeColor="black"
+                                    strokeWidth="5"
+                                    animationDuration="0.75"
+                                    ariaLabel="rotating-lines-loading"
+                                />
+                            </div>
+                        ) : (
+                            <p>Login</p>
+                        )}
                     </button>
                 </div>
             </div>

@@ -20,9 +20,10 @@ declare global {
     };
 
     type User = {
+        StudentId: string;
         Username: string;
         Email: string;
         University: string;
-        UserID: string;
+        UniStudentId: string;
     };
 }
