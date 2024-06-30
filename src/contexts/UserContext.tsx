@@ -75,16 +75,16 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // ? Call to backend to remove cookies
     const logout = async (): Promise<void> => {
         // TODO this will call backend to clear cookies
+        console.log("logout");
+        // try {
+        //     // const response = await api.get("logout");
 
-        try {
-            const response = await api.get("logout");
-
-            setUser(null);
-            setIsLoggedIn(false);
-        } catch (err) {
-            console.log(err);
-            alert("Network error.");
-        }
+        //     setUser(null);
+        //     setIsLoggedIn(false);
+        // } catch (err) {
+        //     console.log(err);
+        //     alert("Network error.");
+        // }
     };
 
     const verifyUserSession = async (): Promise<void> => {

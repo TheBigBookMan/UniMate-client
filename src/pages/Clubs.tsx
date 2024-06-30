@@ -9,7 +9,7 @@ const Clubs = () => {
     return (
         <div className="flex flex-col h-full w-full gap-2">
             <div className="flex justify-between">
-                <p className="text-lg text-slate-300">Clubs</p>
+                <p className="text-lg text-slate-400 font-bold">Clubs</p>
 
                 <select
                     value={category}
