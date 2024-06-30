@@ -14,10 +14,17 @@ export const UserContext = createContext<UserContextInterface | undefined>(
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
     // !!! TEMP
     // const [user, setUser] = useState(null);
-    const [user, setUser] = useState<User | null>(null);
+    // const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>({
+        University: "Fun University",
+        Username: "Smerdy",
+        StudentId: "14",
+        Email: "bensmerd@fununi.edu.au",
+        UniStudentId: "8",
+    });
 
     // !!! TEMP FOR DEV
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const nav = useNavigate();
 
     // ? Send credentials to backend for checking login and add cookies if correct
@@ -80,8 +87,6 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         }
     };
 
-    const value = { user, login, logout, isLoggedIn };
-
     const verifyUserSession = async (): Promise<void> => {
         const cookies = await getCookies();
         let universityNameCookie;
@@ -137,8 +142,10 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
         }
     };
 
+    const value = { user, login, logout, isLoggedIn };
+
     useEffect(() => {
-        verifyUserSession();
+        // verifyUserSession();
     }, []);
 
     return (

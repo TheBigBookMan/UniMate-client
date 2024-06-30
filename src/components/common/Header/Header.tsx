@@ -34,21 +34,6 @@ const Header = () => {
                     />
                 </Link>
                 <Link
-                    to="/settings"
-                    className={`${
-                        pathname === "/settings" &&
-                        "bg-slate-200 rounded-lg p-1"
-                    }`}
-                >
-                    <IoSettingsSharp
-                        className={`text-xl  cursor-pointer ${
-                            pathname === "/settings"
-                                ? "text-slate-500"
-                                : "text-slate-300 hover:text-slate-500"
-                        }`}
-                    />
-                </Link>
-                <Link
                     to="/notifications"
                     className={`${
                         pathname === "/notifications" &&
@@ -58,6 +43,21 @@ const Header = () => {
                     <FaBell
                         className={`text-xl  cursor-pointer ${
                             pathname === "/notifications"
+                                ? "text-slate-500"
+                                : "text-slate-300 hover:text-slate-500"
+                        }`}
+                    />
+                </Link>
+                <Link
+                    to="/settings"
+                    className={`${
+                        pathname === "/settings" &&
+                        "bg-slate-200 rounded-lg p-1"
+                    }`}
+                >
+                    <IoSettingsSharp
+                        className={`text-xl  cursor-pointer ${
+                            pathname === "/settings"
                                 ? "text-slate-500"
                                 : "text-slate-300 hover:text-slate-500"
                         }`}

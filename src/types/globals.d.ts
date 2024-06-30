@@ -6,7 +6,7 @@ declare global {
         login: (userData: LoginDetails) => Promise<boolean>;
         logout: () => void;
         isLoggedIn: boolean;
-        verifyUserSession: () => void;
+        verifyUserSession: () => Promise<void>;
     }
 
     interface SettingsContextInterface {
