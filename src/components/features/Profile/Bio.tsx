@@ -7,17 +7,23 @@ interface BioInterface {
 const Bio = ({ bioInfo }: BioInterface) => {
     return (
         <div className="flex gap-2 w-full h-[120px] ">
-            {/* <img src={Me} className="h-full rounded-xl" /> */}
+            {bioInfo.ProfilePic === "" ? (
+                <div className="h-[80px] w-[120px] border rounded-xl flex justify-center items-center hover:bg-slate-700 cursor-pointer transition">
+                    <p className="text-xs text-slate-300 text-center">
+                        Upload Picture...
+                    </p>
+                </div>
+            ) : (
+                <img
+                    src={bioInfo.ProfilePic}
+                    className="h-[80px] w-[120px] rounded-xl"
+                />
+            )}
 
-            <div className="h-[80px] w-[120px] border rounded-lg flex justify-center items-center hover:bg-slate-700 cursor-pointer transition">
-                <p className="text-xs text-slate-300 text-center">
-                    Upload Picture...
-                </p>
-            </div>
             <div className="flex flex-col w-full">
                 <div className="flex justify-between">
                     <p className="font-bold text-slate-300 max-h-[60px] overflow-y-auto  w-5/6">
-                        Ben Smerd
+                        {bioInfo.FirstName} {bioInfo.LastName}
                     </p>
                     <MdEdit className="text-2xl text-slate-300 w-1/6" />
                 </div>
