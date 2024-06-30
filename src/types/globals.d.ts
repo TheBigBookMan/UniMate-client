@@ -27,4 +27,11 @@ declare global {
         UniStudentId: string;
         CompleteOnboard: string;
     };
+
+    type Bio = {
+        FirstName: string;
+        LastName: string;
+        ProfilePic: string;
+        UniEmail: string;
+    };
 }

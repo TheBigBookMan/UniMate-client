@@ -1,27 +1,73 @@
-import Me from "../images/close.jpg";
-import { MdEdit } from "react-icons/md";
+import Bio from "../components/features/Profile/Bio";
+import { useState, useEffect } from "react";
+import useUserContext from "../hooks/useUserContext";
+import { api } from "../utils/api";
+import { RotatingLines } from "react-loader-spinner";
 
 const Profile = () => {
+    const { user } = useUserContext();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [bioInfo, setBioInfo] = useState<Bio>({
+        FirstName: "",
+        LastName: "",
+        ProfilePic: "",
+        UniEmail: "",
+    });
+
+    const getProfileInfo = async () => {
+        if (!user) return;
+
+        const { StudentId } = user;
+        setIsLoading(true);
+
+        try {
+            const response = await api.get(`/api/profile/${StudentId}`);
+            if (response.status === 200) {
+                const data = response.data;
+                setBioInfo({
+                    FirstName: data.firstName,
+                    LastName: data.lastName,
+                    ProfilePic: data.profilePic,
+                    UniEmail: data.uniEmail,
+                });
+                setIsLoading(false);
+            } else {
+                console.log(response);
+                alert(`Error: ${response.status}- ${response.statusText}`);
+                setIsLoading(false);
+            }
+        } catch (err) {
+            console.log(err);
+            alert("Network error.");
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!user) return;
+        if (user.StudentId !== "") {
+            getProfileInfo();
+        }
+    }, [user]);
+
     return (
         <div className="flex flex-col w-full h-full overflow-y-auto">
-            <div className="flex gap-2 w-full h-[120px] ">
-                <img src={Me} className="h-full rounded-xl" />
-                <div className="flex flex-col w-full">
-                    <div className="flex justify-between">
-                        <p className="font-bold text-slate-300 max-h-[60px] overflow-y-auto  w-5/6">
-                            Ben Smerd
-                        </p>
-                        <MdEdit className="text-2xl text-slate-300 w-1/6" />
-                    </div>
-                    <div className="flex flex-col overflow-y-auto">
-                        <p className="text-slate-300 text-sm">
-                            Masters in COmputer Science in Aritfitial
-                            Intelligence
-                        </p>
-                    </div>
+            {!isLoading ? (
+                bioInfo && <Bio bioInfo={bioInfo} />
+            ) : (
+                <div className="flex items-center justify-center w-full h-full">
+                    <RotatingLines
+                        visible={isLoading}
+                        width="40"
+                        strokeColor="white"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        ariaLabel="rotating-lines-loading"
+                    />
                 </div>
-            </div>
+            )}
         </div>
     );
 };
+
 export default Profile;
