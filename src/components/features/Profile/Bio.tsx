@@ -2,12 +2,14 @@ import { MdEdit } from "react-icons/md";
 import Popup from "../../common/Elements/Popup";
 import { useRef, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
+import { api } from "../../../utils/api";
 
 interface BioInterface {
     bioInfo: Bio;
+    StudentId: string;
 }
 
-const Bio = ({ bioInfo }: BioInterface) => {
+const Bio = ({ bioInfo, StudentId }: BioInterface) => {
     const [uploadProfilePicModal, setUploadProfilePicModal] =
         useState<boolean>(false);
     const [uploadedProfilePic, setUploadedProfilePic] = useState<string>("");
@@ -51,20 +53,23 @@ const Bio = ({ bioInfo }: BioInterface) => {
             console.log(selectedFile);
             const formData = new FormData();
             formData.append("file", selectedFile);
+            formData.append("studentId", StudentId);
+
             // TODO upload to S3 bucket
 
-            // const response = await fetch('https://your-backend-url/upload', {
-            //     method: 'POST',
-            //     body: formData,
-            // });
+            const response = await api.post("/api/profile", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-            // if (!response.ok) {
-            //     throw new Error('Failed to upload image');
-            // }
+            if (!response) {
+                throw new Error("Failed to upload image");
+            }
 
-            // // Handle the response from your backend if necessary
-            // const data = await response.json();
-            // console.log(data);
+            // Handle the response from your backend if necessary
+
+            console.log(response);
 
             setUploadLoading(false);
         } catch (err) {
@@ -96,26 +101,26 @@ const Bio = ({ bioInfo }: BioInterface) => {
                         </div>
                     )}
 
-                    <div className="flex flex-col ">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            className="hidden"
-                        />
-                        <button
-                            type="button"
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 w-[120px]"
-                            onClick={handleButtonClick}
-                        >
-                            Select File
-                        </button>
-                    </div>
+                    <div className="flex justify-center gap-5 w-full">
+                        <div className="flex flex-col ">
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                className="hidden"
+                            />
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 w-[120px]"
+                                onClick={handleButtonClick}
+                            >
+                                Select File
+                            </button>
+                        </div>
 
-                    <div className="w-full flex justify-center ">
                         <button
                             onClick={uploadProfilePic}
-                            className="flex items-center justify-center w-[180px] h-[40px] rounded-lg bg-slate-700 hover:bg-slate-600 cursor-pointer"
+                            className="flex items-center justify-center w-[120px] h-[40px] rounded-lg bg-slate-700 hover:bg-slate-600 cursor-pointer"
                         >
                             {uploadLoading ? (
                                 <div className="flex justify-center items-center">

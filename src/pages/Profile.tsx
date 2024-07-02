@@ -53,7 +53,7 @@ const Profile = () => {
     return (
         <div className="flex flex-col w-full h-full overflow-y-auto">
             {!isLoading ? (
-                bioInfo && <Bio bioInfo={bioInfo} />
+                bioInfo && <Bio bioInfo={bioInfo} StudentId={user?.StudentId} />
             ) : (
                 <div className="flex items-center justify-center w-full h-full">
                     <RotatingLines
