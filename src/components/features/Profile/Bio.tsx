@@ -57,11 +57,15 @@ const Bio = ({ bioInfo, StudentId }: BioInterface) => {
 
             // TODO upload to S3 bucket
 
-            const response = await api.post("/api/profile", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const response = await api.post(
+                "/api/profile/upload-profile",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
 
             if (!response) {
                 throw new Error("Failed to upload image");
