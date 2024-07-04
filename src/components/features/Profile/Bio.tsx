@@ -90,7 +90,7 @@ const Bio = ({ bioInfo, StudentId }: BioInterface) => {
                 onClose={() => setUploadProfilePicModal(false)}
                 title="Upload Profile Picture"
             >
-                <div className="flex flex-col  gap-2 p-2">
+                <div className="flex flex-col  gap-4 p-2 pb-4">
                     {uploadedProfilePic === "" ? (
                         <div className="h-[300px] w-full border border-slate-500 rounded-lg flex justify-center items-center">
                             <p>Upload image...</p>

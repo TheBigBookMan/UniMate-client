@@ -16,11 +16,11 @@ const Popup: FC<PopupProps> = ({ isOpen, onClose, children, title }) => {
             onClick={onClose}
         >
             <div
-                className=" bg-slate-300 rounded-lg shadow-lg max-w-md w-full px-2"
+                className=" bg-slate-300 rounded-lg shadow-lg max-w-md w-full px-2 "
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center">
-                    <p className="text-lg">{title}</p>
+                    <p className="text-xl text-slate-800">{title}</p>
                     <button
                         className="text-3xl text-gray-500 hover:text-gray-700 flex items-center justify-center"
                         onClick={onClose}
